@@ -1,13 +1,10 @@
 import json
-import pandas as pd
+import pandas
 import requests
-from bs4 import BeautifulSoup
+#from bs4 import BeautifulSoup
 
 def main():
-    URL = 'https://www.ica.se/butiker/'
-    URL2 = 'https://www.ica.se'
     jsonRequestUrl = 'https://www.ica.se/Templates/GlobalSearch/Handlers/GlobalSearchHandler.ashx?CommandName=GetAllStoresInProfile&Profile=all'
-
     jsonRequest = requests.get(jsonRequestUrl)
     jsonConversionToListOfDictionary = jsonRequest.json()
     
@@ -18,14 +15,13 @@ def main():
         "PostCode": Store['PostCode'],
         "TelephoneNumber" : Store['TelephoneNumber']})
 
-    print(listOfDictionary)
+    pandas.DataFrame(listOfDictionary).to_excel('output.xlsx', header=False, index=False)
 
-    pd.DataFrame(listOfDictionary).to_excel('output.xlsx', header=False, index=False)
+    if __name__ == "__main__":
+        main()
 
-    #print(json.dumps(listOfDictionary, indent=4))
-
-   
-
+    # URL = 'https://www.ica.se/butiker/'
+    # URL2 = 'https://www.ica.se'
     # page = requests.get(URL)
     # soup = BeautifulSoup(page.content, 'html.parser')
     
@@ -85,6 +81,3 @@ def main():
 	# 				                        <a href="#" class="store-card-navigation-link sprite2-p" target="_blank">Hitta hit</a>
     #                                         <a href="/Templates/Stores/Views/Pages/0303-97500" class="store-card-phone-number sprite2-p">0303-97500</a>
     #                                     </div>
-
-if __name__ == "__main__":
-    main()
