@@ -1,9 +1,9 @@
 import json
 import pandas
 import requests
-#from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup
 
-def main():
+def solveByJson():
     jsonRequestUrl = 'https://www.ica.se/Templates/GlobalSearch/Handlers/GlobalSearchHandler.ashx?CommandName=GetAllStoresInProfile&Profile=all'
     jsonRequest = requests.get(jsonRequestUrl)
     jsonConversionToListOfDictionary = jsonRequest.json()
@@ -17,51 +17,64 @@ def main():
 
     pandas.DataFrame(listOfDictionary).to_excel('output.xlsx', header=False, index=False)
 
-    if __name__ == "__main__":
-        main()
-
-    # URL = 'https://www.ica.se/butiker/'
-    # URL2 = 'https://www.ica.se'
-    # page = requests.get(URL)
-    # soup = BeautifulSoup(page.content, 'html.parser')
+def solveBySoup():
+    URL = 'https://www.ica.se/butiker/'
+    URL2 = 'https://www.ica.se'
+    page = requests.get(URL)
+    soup = BeautifulSoup(page.content, 'html.parser')
     
-    # allLiItems = soup.findAll('li')
+    allLiItems = soup.findAll('li')
 
-    # liItemHrefValue = []
-    # for item in allLiItems:
-    #     aElement = item.find('a')
-    #     liItemHrefValue.append(aElement.get('href'))
+    liItemHrefValue = []
+    for item in allLiItems:
+        aElement = item.find('a')
+        liItemHrefValue.append(aElement.get('href'))
     
     #Get all store links
-    #storeLinks =  [URL2 + l for l in liItemHrefValue if '/butiker' in l]
+    storeLinks =  [URL2 + l for l in liItemHrefValue if '/butiker' in l]
 
     #Store info start at 7
-    # for i in range(7):
-        # storeLinks.pop(0)
+    for i in range(7):
+        storeLinks.pop(0)
     
+    #Ale
     #print(storeLinks[0])
 
-    #for link in storeLinks:
-        #page2 = requests.get(link)
-        #soup2 = BeautifulSoup(page2.content, 'html.parser')
-        #print(soup2)
-        #store = soup2.findAll("class", class_="store-card-main-content")
-        #print(store)
+    # for link in storeLinks:
+    #     page2 = requests.get(link)
+    #     soup2 = BeautifulSoup(page2.content , 'html.parser')
+    #     store = soup2.findAll("class", class_="store-card-main-content")
+    #     print(store)
 
-    # page2 = requests.get(storeLinks[0])
-    # soup2 = BeautifulSoup(page2.content, 'html.parser')
-    # stores = soup2.findAll("div", class_="store-card-main-content")
+    page2 = requests.get(storeLinks[0])
+    soup2 = BeautifulSoup(page2.content, 'html.parser')
+    stores = soup2.findAll("div", class_="store-card-main-content")
     
-    #stores[0]
-	
-    #print(stores[0]) 	
+    print(stores)
 
-    # testList = []
-    # for item in stores:
-    #     aElement = item.find('div')
-    #     testList.append(aElement.get('class'))
+    testList = []
+    for item in stores:
+        aElement = item.find("div")
+        testList.append(aElement.get('class'))
 
-    # storeName =  soup2.select_one('class', class_="card-heading column size20of20 md_size2of3")
+    print(testList)
+
+    #storeName =  soup2.select_one('class', class_="card-heading column size20of20 md_size2of3")
+
+
+def main():
+    #solveByJson()
+    solveBySoup()
+   
+
+
+
+
+
+if __name__ == "__main__":
+    main()
+
+   
 
     
     # #<div class="store-card-main-content">
