@@ -42,7 +42,7 @@ def solveBySoup():
     storeLinks =  [URL2 + l for l in liItemHrefValue if '/butiker' in l]
 
     #Store info start at 7
-    for i in range(7):
+    for i_ in range(7):
         storeLinks.pop(0)
 
     listOfDictionary = []
